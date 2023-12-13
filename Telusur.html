@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mencari dari Nama Pengarang</title>
+</head>
+<body>
+
+    <h1>Mencari data disertasi berdasarkan judul</h1>
+    <input type="text" id="searchInput" placeholder="Search by Title">
+    <button onclick="searchByTitle()">Search</button>
+
+    <p><strong>Hasil:</strong></p>
+    
+    <div id="searchResult"></div>
+    
+
+  <script>
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        displayXML(this);
+      }
+    };
+    xmlhttp.open("GET", "Diser.xml", true); 
+    xmlhttp.send();
+
+    function displayXML(xml) {
+      // Memproses XML
+    }
+
+    function searchByTitle() {
+      var input, filter, xmlDoc, disertasi, i, title, author1, result;
+      input = document.getElementById("searchInput").value.toUpperCase();
+      result = document.getElementById("searchResult");
+
+      // Mengambil data dari XML
+      xmlDoc = xmlhttp.responseXML;
+      disertasi = xmlDoc.getElementsByTagName("Diser");
+
+      // Mencari judul yang cocok dengan input
+      for (i = 0; i < disertasi.length; i++) {
+        title = disertasi[0].getElementsByTagName("Title")[i].childNodes[0].nodeValue.toUpperCase();
+        author1 = disertasi[0].getElementsByTagName("Author1")[i].childNodes[0].nodeValue;
+        var author2 = disertasi[0].getElementsByTagName("Author2")[i].childNodes[0].nodeValue;
+        var publisher = disertasi[0].getElementsByTagName("Publisher")[i].childNodes[0].nodeValue;
+        var abstract = disertasi[0].getElementsByTagName("Abstract")[i].childNodes[0].nodeValue;
+
+        if (title.indexOf(input) > -1) {
+          result.innerHTML = "<p><strong>Title:</strong> " + title + "</p><p><strong>Author:</strong> " + author1 + "</p>"
+          + "<p>" + author2 + "</p>"
+          + "<p>" + publisher + "</p>"
+          + "<p>" + abstract + "</p>"
+          ;
+          return;
+        }
+      }
+
+      // Jika tidak ada hasil yang cocok
+      result.innerHTML = "<p>No results found.</p>";
+    }
+  </script>
+</body>
+</html>

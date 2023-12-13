@@ -1,0 +1,11 @@
+/* Nama File: Diser01.css */
+Access_No
+ {Display:none}
+Title, Author1, Books, Abstract, Publisher
+ {Display:block;font-size:10pt}
+Title
+ {margin-top:12pt;font-weight:bold}
+Author2 Author3 Author4
+ {Display:inline;font-size:10pt}
+Subject1, Subject2, Subject3
+ {Display:inline;font-size:10pt}

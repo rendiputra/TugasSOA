@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Disertasi UPT Perpustakaan IPB</title>
+</head>
+<body>
+  <h1>Daftar Disertasi UPT Perpustakaan IPB</h1>
+  <div id="xmlData"></div>
+  <table id="xmlTable" border="1" cellpadding="5">
+    <thead>
+      <tr>
+        <th>Judul</th>
+        <th>Pengarang</th>
+        <th>Pembimbing</th>
+        <th>Keterangan</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        displayXML(this);
+      }
+    };
+    
+    xmlhttp.open("GET", "Diser.xml", true); 
+    xmlhttp.send();
+
+    function displayXML(xml) {
+        var xmlDoc = xml.responseXML;
+        var data = "";
+        var disertasi = xmlDoc.getElementsByTagName("Disertasi"); // Sesuaikan dengan struktur XML Anda
+        console.log(disertasi[0].getElementsByTagName("Title")[1].childNodes[0].nodeValue);
+
+        var tableBody = document.getElementById("xmlTable").getElementsByTagName("tbody")[0];
+        
+        for (var i = 0; i <= disertasi.length; i++) {
+            var title = disertasi[0].getElementsByTagName("Title")[i].childNodes[0].nodeValue;
+            var author1 = disertasi[0].getElementsByTagName("Author1")[i].childNodes[0].nodeValue;
+            var author2 = disertasi[0].getElementsByTagName("Author2")[i].childNodes[0].nodeValue;
+            var publisher = disertasi[0].getElementsByTagName("Publisher")[i].childNodes[0].nodeValue;
+
+
+            // data += "<td><strong>Title:</strong> " + title + "</td>";
+            // data += "<td><strong>Author:</strong> " + author1 + "</td>";
+            
+            var row = tableBody.insertRow(tableBody.rows.length);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+
+            cell1.innerHTML = title;
+            cell2.innerHTML = author1;
+            cell3.innerHTML = author2;
+            cell4.innerHTML = publisher;
+
+            
+            // row.append("<td>" + title + "</td>");
+            // row.append("<td>" + author1 + "</td>");
+            // row.append("<td>" + author2 + "</td>");
+            // row.append("<td>" + publisher + "</td>");
+            // tableBody.append(row);
+        }
+
+        document.getElementById("xmlData").innerHTML = data;
+    }
+  </script>
+</body>
+</html>

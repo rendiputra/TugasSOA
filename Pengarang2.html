@@ -1,0 +1,55 @@
+<!-- File Name: Mencari Nama Pengarang.htm -->
+<HTML>
+    <HEAD>
+     <TITLE>Mencari dari Nama Pengarang</TITLE>
+    </HEAD>
+    <BODY>
+     <XML ID="dsoDiser" SRC="Diser.xml"></XML>
+     <H2>Mencari Data Disertasi dari Nama</H2>
+     <!--mstheme--><font face="Trebuchet MS, Arial, Helvetica">Nama (bagian dari nama):
+    <INPUT TYPE="TEXT" ID="SearchText" size="20">&nbsp
+     <BUTTON ONCLICK='FindBooks()'>Cari</BUTTON><br>
+    <p></p>
+    <B>Hasil:</B><P>
+     <DIV ID=ResultDiv></DIV>
+     <SCRIPT LANGUAGE="JavaScript">
+        
+     function FindBooks ()
+     {
+     SearchString = SearchText.value.toUpperCase();
+     if (SearchString == "")
+     {
+     ResultDiv.innerHTML = "&ltAnda belum memasukkan Teks kedalam "
+     + "jendela 'Nama'.&gt";
+     return;
+     }
+     dsoDiser.recordset.moveFirst();
+     ResultHTML = "";
+     while (!dsoDiser.recordset.EOF)
+     {
+     TitleString = dsoDiser.recordset("Author1").value;
+     if (TitleString.toUpperCase().indexOf(SearchString)
+     >=0)
+     ResultHTML +="<h3>"+ dsoDiser.recordset("Title") + "</h3>"
+     + "<i>Pengarang : </i>" + dsoDiser.recordset("Author1")
+     + "<BR>"
+     + "<i>Pembimbing: </i>" + dsoDiser.recordset("Author2")
+     + "<BR>"
+     + "<i>Penerbit: </i>" + dsoDiser.recordset("Books")
+     + "<BR>"
+     + "<i>Abstrak: </i>" + dsoDiser.recordset("Abstract")
+     + "<BR>"
+     + "<i>Jenis Publikasi: </i>" + dsoDiser.recordset("Publisher")
+     + "<P>" + "<P>"
+     ; 
+     dsoDiser.recordset.moveNext();
+ }
+ if (ResultHTML == "")
+ ResultDiv.innerHTML = "&lttidak ada dalam basisdata&gt";
+ else
+ ResultDiv.innerHTML = ResultHTML;
+ }
+ </SCRIPT>
+ <!--mstheme--></font>
+</BODY>
+</HTML> 
