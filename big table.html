@@ -1,0 +1,126 @@
+<head>
+  <title>Daftar Disertasi UPT Perpustakaan IPB</title>
+</head>
+
+<body>
+  <h2>Daftar Disertasi UPT Perpustakaan IPB</h2>
+  <button onclick="firstPage()">
+      |&lt; Hal Pertama
+  </button>
+  &nbsp;&nbsp;
+  <button onclick="previousPage()">
+      &lt; Hal Sebelum
+  </button>
+  &nbsp;&nbsp;
+  <button onclick="nextPage()">
+      Hal berikut &gt;
+  </button>
+  &nbsp;&nbsp;
+  <button onclick="lastPage()">
+      Hal akhir &gt;|
+  </button>
+  <table id="DiserTable" border="1" cellpadding="5">
+      <thead>
+          <th>Judul</th>
+          <th>Pengarang</th>
+          <th>Pembimbing</th>
+          <th>Keterangan</th>
+      </thead>
+      <tbody id="tableBody">
+          <!-- Table content will be added here dynamically -->
+      </tbody>
+  </table>
+
+  <script>
+      var currentPage = 1;
+      var itemsPerPage = 1;
+      var rows;// Adjust the number of items per page as needed
+      document.addEventListener('DOMContentLoaded', function () {
+          var xhr = new XMLHttpRequest();
+
+          xhr.onreadystatechange = function () {
+              if (xhr.readyState == 4 && xhr.status == 200) {
+                  // Parse XML
+                  var xmlDoc = xhr.responseXML;
+
+                  // Extract data from XML and populate the table
+                  rows = xmlDoc.querySelectorAll('Diser');
+                  displayData(rows, currentPage, itemsPerPage);
+              }
+          };
+
+          xhr.open('GET', 'Diser.xml', true);
+          xhr.send();
+      });
+
+      function firstPage() {
+          currentPage = 1;
+          updateTable();
+      }
+
+      function lastPage() {
+          currentPage = rows.length
+          updateTable();
+      }
+
+      function previousPage() {
+          if (currentPage > 1) {
+              currentPage--;
+              updateTable();
+          }
+      }
+
+      function nextPage() {
+          // Assuming you have information about the total number of pages
+          var totalPages = Math.ceil(rows.length / itemsPerPage);
+
+          if (currentPage < totalPages) {
+              currentPage++;
+              updateTable();
+          }
+      }
+
+      function displayData(rows, currentPage, itemsPerPage) {
+          var tableBody = document.getElementById('tableBody');
+          tableBody.innerHTML = "";
+
+          var startIndex = (currentPage - 1) * itemsPerPage;
+          var endIndex = startIndex + itemsPerPage;
+
+          for (var i = startIndex; i < Math.min(endIndex, rows.length); i++) {
+              var row = rows[i];
+              var title = row.querySelector('Title').textContent;
+              var author1 = row.querySelector('Author1').textContent;
+              var author2 = row.querySelector('Author2').textContent;
+              var publisher = row.querySelector('Publisher').textContent;
+
+              // Create table row
+              var tr = document.createElement('tr');
+              tr.innerHTML = `<td>${title}</td><td>${author1}</td><td>${author2}</td><td>${publisher}</td>`;
+
+              // Append row to the table
+              tableBody.appendChild(tr);
+          }
+      }
+
+      function updateTable() {
+          var xhr = new XMLHttpRequest();
+
+          xhr.onreadystatechange = function () {
+              if (xhr.readyState == 4 && xhr.status == 200) {
+                  // Parse XML
+                  var xmlDoc = xhr.responseXML;
+
+                  // Extract data from XML and populate the table
+                  var rows = xmlDoc.querySelectorAll('Diser');
+                  displayData(rows, currentPage, itemsPerPage);
+              }
+          };
+
+          xhr.open('GET', 'Diser.xml', true);
+          xhr.send();
+      }
+  </script>
+</body>
+
+</html>
